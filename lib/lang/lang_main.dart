@@ -5,7 +5,9 @@ class LangMain extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    overlays.add('langIntroOverlay');
+    // overlays.add('langIntroOverlay');
+    // overlays.remove('langIntroOverlay');
+    overlays.add('langPlayerOverlay');
   }
 
   @override

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:lang/lang/lang_main.dart';
 import 'package:flame/game.dart';
 import 'package:lang/lang/widgets/lang_intro.dart';
+import 'package:get/get.dart';
+import 'package:lang/lang/widgets/lang_player.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const GetMaterialApp(home: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -49,7 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
             child: GameWidget(
               game: game,
               overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
-                'langIntroOverlay': (context, gmae) => LangIntroOverlay(game),
+                'langIntroOverlay': (context, game) => LangIntroOverlay(game),
+                'langPlayerOverlay': (context, game) => LangPlayerOverlay(game),
               }
             ),
           );
