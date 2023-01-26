@@ -2,13 +2,14 @@ import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lang/lang/gestures/plain_gesture_recognizer.dart';
+import 'package:lang/lang/painter/plain_painter.dart';
 import 'package:lang/lang/states/player_state_controller.dart';
 
 import '../lang_main.dart';
 
 class LangPlayerOverlay extends StatefulWidget {
-
-  const LangPlayerOverlay(this.game,{super.key});
+  const LangPlayerOverlay(this.game, {super.key});
 
   final Game game;
 
@@ -19,8 +20,19 @@ class LangPlayerOverlay extends StatefulWidget {
 }
 
 class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
-
   // late PlayerSateController playerSateController;
+
+  double size = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
+      setState(() {
+        size = MediaQuery.of(context).size.width;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +41,9 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
 
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height * 0.05, 0, 0),
+        width: size,
+        margin: EdgeInsets.fromLTRB(
+            0, MediaQuery.of(context).size.height * 0.1, 0, 0),
         child: Column(
           children: [
             Container(
@@ -45,18 +59,35 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("파일명"),
-                  Text("재생시간")
-                ],
+                children: [Text("파일명"), Text("재생시간")],
               ),
             ),
             Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              margin: EdgeInsets.fromLTRB(size * 0.05,
+                  MediaQuery.of(context).size.height * 0.1, size * 0.05, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("재생바")
+                  RawGestureDetector(
+                    gestures: <Type, GestureRecognizerFactory>{
+                      PlainGestureRecognizer:
+                          GestureRecognizerFactoryWithHandlers<
+                              PlainGestureRecognizer>(
+                        () => PlainGestureRecognizer(
+                          onPanDown: () => {},
+                          onPanUpdate: () => {},
+                          onPanEnd: () => {},
+                        ),
+                        (PlainGestureRecognizer instance) {},
+                      )
+                    },
+                    child: CustomPaint(
+                      painter: PlainPainter(widgetSize: size),
+                      size: Size(size * 0.9, size),
+                    ),
+                  )
                 ],
               ),
             ),
