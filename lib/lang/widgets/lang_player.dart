@@ -70,24 +70,29 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  RawGestureDetector(
-                    gestures: <Type, GestureRecognizerFactory>{
-                      PlainGestureRecognizer:
+                  GetBuilder<PlayerSateController>(
+                    builder: (playerSateController){
+                      return RawGestureDetector(
+                        gestures: <Type, GestureRecognizerFactory>{
+                          PlainGestureRecognizer:
                           GestureRecognizerFactoryWithHandlers<
                               PlainGestureRecognizer>(
-                        () => PlainGestureRecognizer(
-                          onPanDown: () => {},
-                          onPanUpdate: () => {},
-                          onPanEnd: () => {},
+                                () => PlainGestureRecognizer(
+                              onPanDown: () => {},
+                              onPanUpdate: () => {},
+                              onPanEnd: () => {},
+                            ),
+                                (PlainGestureRecognizer instance) {},
+                          )
+                        },
+                        child: CustomPaint(
+                          painter: PlainPainter(widgetSize: size, playerStateController: playerSateController),
+                          size: Size(size * 0.9, size),
                         ),
-                        (PlainGestureRecognizer instance) {},
-                      )
+                      );
                     },
-                    child: CustomPaint(
-                      painter: PlainPainter(widgetSize: size),
-                      size: Size(size * 0.9, size),
-                    ),
                   )
+
                 ],
               ),
             ),
