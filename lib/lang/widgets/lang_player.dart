@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lang/lang/gestures/plain_gesture_recognizer.dart';
+import 'package:lang/lang/painter/pacman_painter.dart';
 import 'package:lang/lang/painter/plain_painter.dart';
 import 'package:lang/lang/states/player_state_controller.dart';
 
@@ -19,17 +20,25 @@ class LangPlayerOverlay extends StatefulWidget {
   }
 }
 
-class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
-  // late PlayerSateController playerSateController;
-
-  double size = 0.0;
+class _LangPlayerOverlayState extends State<LangPlayerOverlay>
+    with TickerProviderStateMixin {
+  double screenWidth = 0.0;
+  late AnimationController _pacmanAnimationController;
+  late Animation<double> _pacmanAnimation;
+  final double pacmacSize = 100.0; // px
 
   @override
   void initState() {
+    _pacmanAnimationController =
+        AnimationStorage.getPacmanAnimationController(this);
+    _pacmanAnimation =
+        AnimationStorage.getPacmanAnimation(_pacmanAnimationController);
+    _pacmanAnimationController.repeat(reverse: true);
+
     super.initState();
     WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
       setState(() {
-        size = MediaQuery.of(context).size.width;
+        screenWidth = MediaQuery.of(context).size.width;
       });
     });
   }
@@ -41,9 +50,9 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
 
     return Scaffold(
       body: Container(
-        width: size,
+        width: screenWidth,
         margin: EdgeInsets.fromLTRB(
-            0, MediaQuery.of(context).size.height * 0.1, 0, 0),
+            screenWidth*0.05, MediaQuery.of(context).size.height * 0.05, screenWidth*0.05, 0),
         child: Column(
           children: [
             Container(
@@ -63,36 +72,53 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.1,
-              margin: EdgeInsets.fromLTRB(size * 0.05,
-                  MediaQuery.of(context).size.height * 0.1, size * 0.05, 0),
+              height: MediaQuery.of(context).size.height * 0.05,
+              margin: EdgeInsets.fromLTRB(screenWidth * 0.05,
+                  MediaQuery.of(context).size.height * 0.1, screenWidth * 0.05, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GetBuilder<PlayerSateController>(
-                    builder: (playerSateController){
+                    builder: (playerSateController) {
                       return RawGestureDetector(
-                        gestures: <Type, GestureRecognizerFactory>{
-                          PlainGestureRecognizer:
-                          GestureRecognizerFactoryWithHandlers<
-                              PlainGestureRecognizer>(
-                                () => PlainGestureRecognizer(
-                              onPanDown: () => {},
-                              onPanUpdate: () => {},
-                              onPanEnd: () => {},
-                            ),
-                                (PlainGestureRecognizer instance) {},
-                          )
-                        },
-                        child: CustomPaint(
-                          painter: PlainPainter(widgetSize: size, playerStateController: playerSateController),
-                          size: Size(size * 0.9, size),
-                        ),
-                      );
+                          gestures: <Type, GestureRecognizerFactory>{
+                            PlainGestureRecognizer:
+                                GestureRecognizerFactoryWithHandlers<
+                                    PlainGestureRecognizer>(
+                              () => PlainGestureRecognizer(
+                                onPanDown: () => {},
+                                onPanUpdate: () => {},
+                                onPanEnd: () => {},
+                              ),
+                              (PlainGestureRecognizer instance) {},
+                            )
+                          },
+                          child: Stack(
+                            clipBehavior: Clip.antiAlias,
+                            children: <Widget>[
+                              Positioned(
+                                  child: CustomPaint(
+                                    painter: PlainPainter(
+                                      playerStateController:
+                                          playerSateController,
+                                    ),
+                                    size: Size(screenWidth * 0.8, screenWidth),
+                                  )),
+                              Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: CustomPaint(
+                                    painter: PacmanPainter(
+                                        playerSateController:
+                                            playerSateController,
+                                        listenable: _pacmanAnimation),
+                                    size: Size(screenWidth * 0.1, screenWidth * 0.1),
+                                  ))
+                            ],
+                          ));
                     },
                   )
-
                 ],
               ),
             ),
@@ -155,21 +181,17 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay> {
         ),
       ),
     );
+  }
+}
 
-    /*return Scaffold(
-      body: Center(
-        child: GetBuilder<PlayerSateController>(
-          builder: (playerSateController){
-            return Text(
-              playerSateController.test,
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w100
-              ),
-            );
-          },
-        ),
-      ),
-    );*/
+class AnimationStorage {
+  static AnimationController getPacmanAnimationController(
+      TickerProvider vsyncParam) {
+    return AnimationController(
+        vsync: vsyncParam, duration: const Duration(milliseconds: 300));
+  }
+
+  static Animation<double> getPacmanAnimation(AnimationController controller) {
+    return Tween<double>(begin: 90, end: 0).animate(controller);
   }
 }
