@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../states/player_state_controller.dart';
@@ -16,8 +15,10 @@ class PlainPainter extends CustomPainter {
       ..moveTo(0, size.height * 0.2)
       ..lineTo(size.width, size.height * 0.2);
     Path playPointer = Path()
-      ..moveTo(0, -size.height * 0.15)
-      ..lineTo(0, 0);
+      ..moveTo(size.width * playerStateController.getPlayPointerXRatio(),
+          -size.height * 0.15)
+      ..lineTo(size.width * playerStateController.getPlayPointerXRatio(),
+          size.height * 0.5);
 
     final paint = Paint()
       ..color = Color(0xff435F8C)
