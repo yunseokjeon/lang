@@ -105,9 +105,9 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                                     ),
                                     size: Size(screenWidth * 0.8, screenWidth),
                                   )),
-                              Positioned(
+                             Positioned(
                                   top: 0,
-                                  left: 0,
+                                  right: 0,
                                   child: CustomPaint(
                                     painter: PacmanPainter(
                                         playerSateController:
