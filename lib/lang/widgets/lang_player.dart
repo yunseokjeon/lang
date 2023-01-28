@@ -23,9 +23,11 @@ class LangPlayerOverlay extends StatefulWidget {
 class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     with TickerProviderStateMixin {
   double screenWidth = 0.0;
+  double screenHeight = 0.0;
   late AnimationController _pacmanAnimationController;
   late Animation<double> _pacmanAnimation;
   final double pacmacSize = 100.0; // px
+  late PlayerSateController playerSateController;
 
   @override
   void initState() {
@@ -39,20 +41,31 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
       setState(() {
         screenWidth = MediaQuery.of(context).size.width;
+        screenHeight = MediaQuery.of(context).size.height;
       });
     });
   }
 
+  void _onPanDown(Offset details) {
+    // Offset(142.0, 206.0)
+    double ratio = details.dx / screenWidth;
+    playerSateController.setPlayPointerXRatio(ratio);
+  }
+
+  void _onPanUpdate(Offset details) {}
+
+  void _onPanEnd(Offset details) {}
+
   @override
   Widget build(BuildContext context) {
     LangMain game = widget.game as LangMain;
-    Get.put(PlayerSateController());
+    this.playerSateController = Get.put(PlayerSateController());
 
     return Scaffold(
       body: Container(
         width: screenWidth,
         margin: EdgeInsets.fromLTRB(
-            screenWidth*0.05, MediaQuery.of(context).size.height * 0.05, screenWidth*0.05, 0),
+            screenWidth * 0.05, screenHeight * 0.05, screenWidth * 0.05, 0),
         child: Column(
           children: [
             Container(
@@ -72,9 +85,9 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: screenHeight * 0.05,
               margin: EdgeInsets.fromLTRB(screenWidth * 0.05,
-                  MediaQuery.of(context).size.height * 0.1, screenWidth * 0.05, 0),
+                  screenHeight * 0.1, screenWidth * 0.05, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,9 +100,9 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                                 GestureRecognizerFactoryWithHandlers<
                                     PlainGestureRecognizer>(
                               () => PlainGestureRecognizer(
-                                onPanDown: () => {},
-                                onPanUpdate: () => {},
-                                onPanEnd: () => {},
+                                onPanDown: _onPanDown,
+                                onPanUpdate: _onPanUpdate,
+                                onPanEnd: _onPanEnd,
                               ),
                               (PlainGestureRecognizer instance) {},
                             )
@@ -99,13 +112,12 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                             children: <Widget>[
                               Positioned(
                                   child: CustomPaint(
-                                    painter: PlainPainter(
-                                      playerStateController:
-                                          playerSateController,
-                                    ),
-                                    size: Size(screenWidth * 0.8, screenWidth),
-                                  )),
-                             Positioned(
+                                painter: PlainPainter(
+                                  playerStateController: playerSateController,
+                                ),
+                                size: Size(screenWidth * 0.8, screenWidth),
+                              )),
+                              Positioned(
                                   top: 0,
                                   right: 0,
                                   child: CustomPaint(
@@ -113,7 +125,8 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                                         playerSateController:
                                             playerSateController,
                                         listenable: _pacmanAnimation),
-                                    size: Size(screenWidth * 0.1, screenWidth * 0.1),
+                                    size: Size(
+                                        screenWidth * 0.1, screenWidth * 0.1),
                                   ))
                             ],
                           ));
