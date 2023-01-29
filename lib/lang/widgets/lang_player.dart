@@ -59,7 +59,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   @override
   Widget build(BuildContext context) {
     LangMain game = widget.game as LangMain;
-    this.playerSateController = Get.put(PlayerSateController());
+    this.playerSateController = Get.find<PlayerSateController>();
 
     return Scaffold(
       body: Container(
@@ -115,7 +115,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                                 painter: PlainPainter(
                                   playerStateController: playerSateController,
                                 ),
-                                size: Size(screenWidth * 0.8, screenWidth),
+                                size: Size(screenWidth * 0.75, screenHeight * 0.2),
                               )),
                               Positioned(
                                   top: 0,
