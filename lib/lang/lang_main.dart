@@ -12,10 +12,10 @@ class LangMain extends FlameGame {
   @override
   Future<void> onLoad() async {
     playerStateController.setPlayPointerXRatio(0.0);
+    overlays.add('langPlayerOverlay');
     overlays.add('langIntroOverlay');
     Timer(Duration(seconds: 2), () {
       overlays.remove('langIntroOverlay');
-      overlays.add('langPlayerOverlay');
     });
   }
 
