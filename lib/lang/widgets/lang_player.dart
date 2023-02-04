@@ -24,6 +24,8 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     with TickerProviderStateMixin {
   double screenWidth = 0.0;
   double screenHeight = 0.0;
+  double plainPainterWidth = 0.0;
+
   late AnimationController _pacmanAnimationController;
   late Animation<double> _pacmanAnimation;
   final double pacmacSize = 100.0; // px
@@ -42,13 +44,14 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
       setState(() {
         screenWidth = MediaQuery.of(context).size.width;
         screenHeight = MediaQuery.of(context).size.height;
+        plainPainterWidth = screenWidth * 0.75;
       });
     });
   }
 
   void _onPanDown(Offset details) {
-    // Offset(142.0, 206.0)
-    double ratio = details.dx / screenWidth;
+    double leftResidual = (screenWidth - plainPainterWidth) / 2;
+    double ratio = (details.dx - leftResidual) / plainPainterWidth;
     playerSateController.setPlayPointerXRatio(ratio);
   }
 
@@ -115,7 +118,8 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                                 painter: PlainPainter(
                                   playerStateController: playerSateController,
                                 ),
-                                size: Size(screenWidth * 0.75, screenHeight * 0.2),
+                                size:
+                                    Size(plainPainterWidth, screenHeight * 0.2),
                               )),
                               Positioned(
                                   top: 0,
