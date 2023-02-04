@@ -25,6 +25,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   double screenWidth = 0.0;
   double screenHeight = 0.0;
   double plainPainterWidth = 0.0;
+  double plainPainterHeight = 0.0;
 
   late AnimationController _pacmanAnimationController;
   late Animation<double> _pacmanAnimation;
@@ -45,6 +46,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         screenWidth = MediaQuery.of(context).size.width;
         screenHeight = MediaQuery.of(context).size.height;
         plainPainterWidth = screenWidth * 0.75;
+        plainPainterHeight = screenHeight * 0.2;
       });
     });
   }
@@ -119,7 +121,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                                   playerStateController: playerSateController,
                                 ),
                                 size:
-                                    Size(plainPainterWidth, screenHeight * 0.2),
+                                    Size(plainPainterWidth, plainPainterHeight),
                               )),
                               Positioned(
                                   top: 0,
