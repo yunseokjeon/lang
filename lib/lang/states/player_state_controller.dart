@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 class PlayerSateController extends GetxController {
-
   double playPointerXRatio = 0.3;
 
   double getPlayPointerXRatio() {
@@ -13,5 +14,16 @@ class PlayerSateController extends GetxController {
       playPointerXRatio = newValue;
       update();
     }
+  }
+
+  double getPlayPointerX(
+    double leftResidual,
+    double plainPainterWidth,
+  ) {
+    return (playPointerXRatio * plainPainterWidth) + leftResidual;
+  }
+
+  bool isTouchPlayPointer(Offset point, double pointerX, double base) {
+    return (point.dx - pointerX).abs() < base;
   }
 }
