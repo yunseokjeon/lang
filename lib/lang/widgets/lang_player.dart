@@ -26,6 +26,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   double screenHeight = 0.0;
   double plainPainterWidth = 0.0;
   double plainPainterHeight = 0.0;
+  bool isPlayPointerDragging = false;
 
   late AnimationController _pacmanAnimationController;
   late Animation<double> _pacmanAnimation;
@@ -53,13 +54,31 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
 
   void _onPanDown(Offset details) {
     double leftResidual = (screenWidth - plainPainterWidth) / 2;
+    double playPointerX = playerSateController.getPlayPointerX(leftResidual, plainPainterWidth);
+
+    final box = context.findRenderObject()! as RenderBox;
+    final localOffset = box.globalToLocal(details);
     double ratio = (details.dx - leftResidual) / plainPainterWidth;
     playerSateController.setPlayPointerXRatio(ratio);
+
+    if (playerSateController.isTouchPlayPointer(localOffset,playPointerX, 16)) {
+      isPlayPointerDragging = true;
+    }
   }
 
-  void _onPanUpdate(Offset details) {}
+  void _onPanUpdate(Offset details) {
+    if (isPlayPointerDragging) {
+      double leftResidual = (screenWidth - plainPainterWidth) / 2;
+      double ratio = (details.dx - leftResidual) / plainPainterWidth;
+      playerSateController.setPlayPointerXRatio(ratio);
+    }
+  }
 
-  void _onPanEnd(Offset details) {}
+  void _onPanEnd(Offset details) {
+    if (isPlayPointerDragging) {
+      isPlayPointerDragging = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

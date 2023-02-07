@@ -37,6 +37,7 @@ class PlainPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8.0;
 
+
     canvas.drawPath(leftCrossbeam, leftBeamPaint);
     canvas.drawPath(rightCrossbeam, rightBeamPaint);
     canvas.drawPath(playPointer, leftBeamPaint);
