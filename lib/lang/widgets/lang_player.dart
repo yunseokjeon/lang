@@ -27,6 +27,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   double plainPainterWidth = 0.0;
   double plainPainterHeight = 0.0;
   bool isPlayPointerDragging = false;
+  bool isPointerADragging = false;
 
   late AnimationController _pacmanAnimationController;
   late Animation<double> _pacmanAnimation;
@@ -48,35 +49,63 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         screenHeight = MediaQuery.of(context).size.height;
         plainPainterWidth = screenWidth * 0.75;
         plainPainterHeight = screenHeight * 0.2;
+
+        playerSateController.setPlayPointerYStart(plainPainterHeight * 0.15);
+        playerSateController.setPlayPointerYEnd(plainPainterHeight * 0.5);
+
+        double playPointerYMiddlePoint =
+            plainPainterHeight * playerSateController.crossbeamYRatio;
+
+        playerSateController
+            .setPlayPointerYMiddlePoint(playPointerYMiddlePoint);
+
+        playerSateController.setPointerAYMiddlePoint(
+            plainPainterHeight * playerSateController.pointerAYRatio);
+
       });
     });
   }
 
   void _onPanDown(Offset details) {
     double leftResidual = (screenWidth - plainPainterWidth) / 2;
-    double playPointerX = playerSateController.getPlayPointerX(leftResidual, plainPainterWidth);
+    double playPointerX =
+        playerSateController.getPlayPointerX(leftResidual, plainPainterWidth);
+    double pointerAX =
+        playerSateController.getPointerAX(leftResidual, plainPainterWidth);
 
     final box = context.findRenderObject()! as RenderBox;
     final localOffset = box.globalToLocal(details);
     double ratio = (details.dx - leftResidual) / plainPainterWidth;
-    playerSateController.setPlayPointerXRatio(ratio);
 
-    if (playerSateController.isTouchPlayPointer(localOffset,playPointerX, 16)) {
+    if(!playerSateController.isTouchPointerA(localOffset, pointerAX, plainPainterHeight, 80)) {
+      playerSateController.setPlayPointerXRatio(ratio);
+    }
+
+    if (playerSateController.isTouchPlayPointer(
+        localOffset, playPointerX, plainPainterHeight, 100)) {
       isPlayPointerDragging = true;
+    } else if (playerSateController.isTouchPointerA(
+        localOffset, pointerAX, plainPainterHeight, 100)) {
+      isPointerADragging = true;
     }
   }
 
   void _onPanUpdate(Offset details) {
+    double leftResidual = (screenWidth - plainPainterWidth) / 2;
+    double ratio = (details.dx - leftResidual) / plainPainterWidth;
+
     if (isPlayPointerDragging) {
-      double leftResidual = (screenWidth - plainPainterWidth) / 2;
-      double ratio = (details.dx - leftResidual) / plainPainterWidth;
       playerSateController.setPlayPointerXRatio(ratio);
+    } else if (isPointerADragging) {
+      playerSateController.setPointerAXRatio(ratio);
     }
   }
 
   void _onPanEnd(Offset details) {
     if (isPlayPointerDragging) {
       isPlayPointerDragging = false;
+    } else if (isPointerADragging) {
+      isPointerADragging = false;
     }
   }
 
@@ -132,7 +161,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                             )
                           },
                           child: Stack(
-                            clipBehavior: Clip.antiAlias,
+                            clipBehavior: Clip.none,
                             children: <Widget>[
                               Positioned(
                                   child: CustomPaint(
