@@ -37,7 +37,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: LayoutBuilder(builder: (context, constraints) {
           return Container(
+            constraints: const BoxConstraints(minWidth: 550, minHeight: 800),
             child: GameWidget(game: game, overlayBuilderMap: <String,
                 Widget Function(BuildContext, Game)>{
               'langIntroOverlay': (context, game) => LangIntroOverlay(game),
