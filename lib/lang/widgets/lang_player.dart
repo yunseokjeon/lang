@@ -145,7 +145,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
 
     if (playerSateController.isTouchVolume(
         localOffset, volumePointerY, volumePosition)) {
-      // isVolumeDragging = true;
+      isVolumeDragging = true;
     }
   }
 
@@ -154,9 +154,11 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         volumeKey.currentContext?.findRenderObject() as RenderBox;
     Offset volumePosition = volumeKeyBox.localToGlobal(Offset.zero);
 
-    double ratio =
-        1 - ((details.dy - volumePosition.dy) / (verticalPainterHeight));
-    playerSateController.setVolumeYRatio(ratio);
+    if (isVolumeDragging) {
+      double ratio =
+          1 - ((details.dy - volumePosition.dy) / (verticalPainterHeight));
+      playerSateController.setVolumeYRatio(ratio);
+    }
   }
 
   void onVolumePanEnd(Offset details) {
