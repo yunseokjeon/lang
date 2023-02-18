@@ -28,20 +28,12 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   double plainPainterHeight = 0.0;
   bool isPlayPointerDragging = false;
   bool isPointerADragging = false;
+  bool isPointerBDragging = false;
 
-  late AnimationController _pacmanAnimationController;
-  late Animation<double> _pacmanAnimation;
-  final double pacmacSize = 100.0; // px
   late PlayerSateController playerSateController;
 
   @override
   void initState() {
-    _pacmanAnimationController =
-        AnimationStorage.getPacmanAnimationController(this);
-    _pacmanAnimation =
-        AnimationStorage.getPacmanAnimation(_pacmanAnimationController);
-    _pacmanAnimationController.repeat(reverse: true);
-
     super.initState();
     WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
       setState(() {
@@ -62,6 +54,8 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         playerSateController.setPointerAYMiddlePoint(
             plainPainterHeight * playerSateController.pointerAYRatio);
 
+        playerSateController.setPointerBYMiddlePoint(
+            plainPainterHeight * playerSateController.pointerBYRatio);
       });
     });
   }
@@ -72,12 +66,17 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         playerSateController.getPlayPointerX(leftResidual, plainPainterWidth);
     double pointerAX =
         playerSateController.getPointerAX(leftResidual, plainPainterWidth);
+    double pointerBX =
+        playerSateController.getPointerBX(leftResidual, plainPainterWidth);
 
     final box = context.findRenderObject()! as RenderBox;
     final localOffset = box.globalToLocal(details);
     double ratio = (details.dx - leftResidual) / plainPainterWidth;
 
-    if(!playerSateController.isTouchPointerA(localOffset, pointerAX, plainPainterHeight, 80)) {
+    if (!playerSateController.isTouchPointerA(
+            localOffset, pointerAX, plainPainterHeight, 80) &&
+        !playerSateController.isTouchPointerB(
+            localOffset, pointerBX, plainPainterHeight, 80)) {
       playerSateController.setPlayPointerXRatio(ratio);
     }
 
@@ -87,6 +86,9 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     } else if (playerSateController.isTouchPointerA(
         localOffset, pointerAX, plainPainterHeight, 100)) {
       isPointerADragging = true;
+    } else if (playerSateController.isTouchPointerB(
+        localOffset, pointerBX, plainPainterHeight, 100)) {
+      isPointerBDragging = true;
     }
   }
 
@@ -98,6 +100,8 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
       playerSateController.setPlayPointerXRatio(ratio);
     } else if (isPointerADragging) {
       playerSateController.setPointerAXRatio(ratio);
+    } else if (isPointerBDragging) {
+      playerSateController.setPointerBXRatio(ratio);
     }
   }
 
@@ -106,6 +110,8 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
       isPlayPointerDragging = false;
     } else if (isPointerADragging) {
       isPointerADragging = false;
+    } else if (isPointerBDragging) {
+      isPointerBDragging = false;
     }
   }
 
@@ -171,17 +177,6 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                                 size:
                                     Size(plainPainterWidth, plainPainterHeight),
                               )),
-                              Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: CustomPaint(
-                                    painter: PacmanPainter(
-                                        playerSateController:
-                                            playerSateController,
-                                        listenable: _pacmanAnimation),
-                                    size: Size(
-                                        screenWidth * 0.1, screenWidth * 0.1),
-                                  ))
                             ],
                           ));
                     },

@@ -10,8 +10,12 @@ class PlayerSateController extends GetxController {
   double playPointerYEndRatio = 0.0;
 
   double pointerAXRatio = 0.0;
-  double pointerAYRatio = 0.80;
+  double pointerAYRatio = 0.8;
   double pointerAYMiddlePoint = 0.0;
+
+  double pointerBXRatio = 1.0;
+  double pointerBYRatio = 0.8;
+  double pointerBYMiddlePoint = 0.0;
 
   void setPlayPointerYStart(double start) {
     playPointerYStartRatio = start;
@@ -53,6 +57,13 @@ class PlayerSateController extends GetxController {
     }
   }
 
+  void setPointerBXRatio(double newValue) {
+    if (0.0 <= newValue && newValue <= 1.0) {
+      pointerBXRatio = newValue;
+      update();
+    }
+  }
+
   setPlayPointerYMiddlePoint(double newValue) {
     playPointerYMiddlePoint = newValue;
     update();
@@ -60,6 +71,11 @@ class PlayerSateController extends GetxController {
 
   void setPointerAYMiddlePoint(double newValue) {
     pointerAYMiddlePoint = newValue;
+    update();
+  }
+
+  void setPointerBYMiddlePoint(double newValue) {
+    pointerBYMiddlePoint = newValue;
     update();
   }
 
@@ -71,17 +87,25 @@ class PlayerSateController extends GetxController {
     return (pointerAXRatio * plainPainterWidth) + leftResidual;
   }
 
+  double getPointerBX(double leftResidual, double plainPainterWidth) {
+    return (pointerBXRatio * plainPainterWidth) + leftResidual;
+  }
+
   bool isTouchPlayPointer(
       Offset point, double pointerX, double painterHeight, double base) {
-
     return (point.dx - pointerX).abs() < base &&
         (point.dy - playPointerYMiddlePoint).abs() < base;
   }
 
   bool isTouchPointerA(
       Offset point, double pointerX, double painterHeight, double base) {
-
     return (point.dx - pointerX).abs() < base &&
         (point.dy - pointerAYMiddlePoint).abs() < base;
+  }
+
+  bool isTouchPointerB(
+      Offset point, double pointerX, double painterHeight, double base) {
+    return (point.dx - pointerX).abs() < base &&
+        (point.dy - pointerBYMiddlePoint).abs() < base;
   }
 }
