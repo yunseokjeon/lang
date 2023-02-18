@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lang/lang/gestures/plain_gesture_recognizer.dart';
-import 'package:lang/lang/painter/pacman_painter.dart';
 import 'package:lang/lang/painter/plain_painter.dart';
 import 'package:lang/lang/states/player_state_controller.dart';
 
@@ -246,14 +245,3 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   }
 }
 
-class AnimationStorage {
-  static AnimationController getPacmanAnimationController(
-      TickerProvider vsyncParam) {
-    return AnimationController(
-        vsync: vsyncParam, duration: const Duration(milliseconds: 300));
-  }
-
-  static Animation<double> getPacmanAnimation(AnimationController controller) {
-    return Tween<double>(begin: 90, end: 0).animate(controller);
-  }
-}
