@@ -17,6 +17,8 @@ class PlayerSateController extends GetxController {
   double pointerBYRatio = 0.8;
   double pointerBYMiddlePoint = 0.0;
 
+  double volumeYRatio = 1.0;
+
   void setPlayPointerYStart(double start) {
     playPointerYStartRatio = start;
     update();
@@ -79,6 +81,13 @@ class PlayerSateController extends GetxController {
     update();
   }
 
+  void setVolumeYRatio(double newValue) {
+    if (0.0 <= newValue && newValue <= 1.0) {
+      volumeYRatio = newValue;
+      update();
+    }
+  }
+
   double getPlayPointerX(double leftResidual, double plainPainterWidth) {
     return (playPointerXRatio * plainPainterWidth) + leftResidual;
   }
@@ -107,5 +116,10 @@ class PlayerSateController extends GetxController {
       Offset point, double pointerX, double painterHeight, double base) {
     return (point.dx - pointerX).abs() < base &&
         (point.dy - pointerBYMiddlePoint).abs() < base;
+  }
+
+  bool isTouchVolume(
+      Offset point, double volumePointerY, Offset volumePosition) {
+    return point.dy > (volumePosition.dy + volumePointerY);
   }
 }

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lang/lang/gestures/plain_gesture_recognizer.dart';
 import 'package:lang/lang/painter/plain_painter.dart';
+import 'package:lang/lang/painter/vertical_painter.dart';
 import 'package:lang/lang/states/player_state_controller.dart';
+import 'package:lang/lang/states/vertical_category.dart';
 
 import '../lang_main.dart';
 
@@ -23,13 +25,21 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     with TickerProviderStateMixin {
   double screenWidth = 0.0;
   double screenHeight = 0.0;
+
   double plainPainterWidth = 0.0;
   double plainPainterHeight = 0.0;
+
+  double verticalPainterWidth = 0.0;
+  double verticalPainterHeight = 0.0;
+
   bool isPlayPointerDragging = false;
   bool isPointerADragging = false;
   bool isPointerBDragging = false;
+  bool isVolumeDragging = false;
 
   late PlayerSateController playerSateController;
+
+  GlobalKey volumeKey = GlobalKey();
 
   @override
   void initState() {
@@ -38,8 +48,12 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
       setState(() {
         screenWidth = MediaQuery.of(context).size.width;
         screenHeight = MediaQuery.of(context).size.height;
+
         plainPainterWidth = screenWidth * 0.75;
         plainPainterHeight = screenHeight * 0.2;
+
+        verticalPainterWidth = screenWidth * 0.1;
+        verticalPainterHeight = screenHeight * 0.15;
 
         playerSateController.setPlayPointerYStart(plainPainterHeight * 0.15);
         playerSateController.setPlayPointerYEnd(plainPainterHeight * 0.5);
@@ -111,6 +125,43 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
       isPointerADragging = false;
     } else if (isPointerBDragging) {
       isPointerBDragging = false;
+    }
+  }
+
+  void onVolumePanDown(Offset details) {
+    final box = context.findRenderObject()! as RenderBox;
+    final localOffset = box.globalToLocal(details);
+    double volumePointerY =
+        verticalPainterHeight * (1 - playerSateController.volumeYRatio);
+
+    RenderBox volumeKeyBox =
+        volumeKey.currentContext?.findRenderObject() as RenderBox;
+    Offset volumePosition = volumeKeyBox.localToGlobal(Offset.zero);
+
+    double ratio =
+        1 - ((details.dy - volumePosition.dy) / (verticalPainterHeight));
+    print("ratio : " + ratio.toString());
+    playerSateController.setVolumeYRatio(ratio);
+
+    if (playerSateController.isTouchVolume(
+        localOffset, volumePointerY, volumePosition)) {
+      // isVolumeDragging = true;
+    }
+  }
+
+  void onVolumePanUpdate(Offset details) {
+    RenderBox volumeKeyBox =
+        volumeKey.currentContext?.findRenderObject() as RenderBox;
+    Offset volumePosition = volumeKeyBox.localToGlobal(Offset.zero);
+
+    double ratio =
+        1 - ((details.dy - volumePosition.dy) / (verticalPainterHeight));
+    playerSateController.setVolumeYRatio(ratio);
+  }
+
+  void onVolumePanEnd(Offset details) {
+    if (isVolumeDragging) {
+      isVolumeDragging = false;
     }
   }
 
@@ -202,7 +253,38 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
                 children: [
                   Flexible(
                     flex: 1,
-                    child: Text("볼륨"),
+                    child: GetBuilder<PlayerSateController>(
+                        builder: (playerSateController) {
+                      return RawGestureDetector(
+                        gestures: <Type, GestureRecognizerFactory>{
+                          PlainGestureRecognizer:
+                              GestureRecognizerFactoryWithHandlers<
+                                  PlainGestureRecognizer>(
+                            () => PlainGestureRecognizer(
+                              onPanDown: onVolumePanDown,
+                              onPanUpdate: onVolumePanUpdate,
+                              onPanEnd: onVolumePanEnd,
+                            ),
+                            (PlainGestureRecognizer instance) {},
+                          )
+                        },
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: <Widget>[
+                            Positioned(
+                                key: volumeKey,
+                                child: CustomPaint(
+                                  painter: VerticalPainter(
+                                      playerStateController:
+                                          playerSateController,
+                                      category: VerticalCatogory.volume),
+                                  size: Size(verticalPainterWidth,
+                                      verticalPainterHeight),
+                                ))
+                          ],
+                        ),
+                      );
+                    }),
                   ),
                   Flexible(
                     flex: 1,
@@ -244,4 +326,3 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     );
   }
 }
-
