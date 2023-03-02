@@ -46,6 +46,30 @@ class PlainPainter extends CustomPainter {
 
     RangePointer.pointerB(canvas, size, playerStateController,
         playerStateController.pointerBXRatio);
+
+    TextStyle startTimeTextStyle =
+        TextStyle(color: Colors.black, fontSize: size.width * 0.02);
+    TextSpan startTimeTextSpan = TextSpan(text: "00:00", style: startTimeTextStyle);
+    TextPainter startTimeTextPainter =
+        TextPainter(text: startTimeTextSpan, textDirection: TextDirection.ltr);
+    startTimeTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.1);
+    Offset startOffset = Offset(
+        0,
+        size.height * playerStateController.crossbeamYRatio +
+            size.height * 0.1);
+    startTimeTextPainter.paint(canvas, startOffset);
+
+    TextStyle endTimeTextStyle =
+    TextStyle(color: Colors.black, fontSize: size.width * 0.02);
+    TextSpan endTimeTextSpan = TextSpan(text: "20:00", style: endTimeTextStyle);
+    TextPainter endTimeTextPainter =
+    TextPainter(text: endTimeTextSpan, textDirection: TextDirection.ltr);
+    endTimeTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.1);
+    Offset endOffset = Offset(
+        size.width,
+        size.height * playerStateController.crossbeamYRatio +
+            size.height * 0.1);
+    endTimeTextPainter.paint(canvas, endOffset);
   }
 
   @override
@@ -137,6 +161,17 @@ class RangePointer {
       ..color = Colors.white.withOpacity(1.0);
 
     canvas.drawPath(path_1, paint_1_fill);
+
+    TextStyle textStyle =
+        TextStyle(color: Colors.black, fontSize: size.width * 0.02);
+    TextSpan textSpan = TextSpan(
+        text: playerStateController.pointerAXRatio.toString(),
+        style: textStyle);
+    TextPainter textPainter =
+        TextPainter(text: textSpan, textDirection: TextDirection.ltr);
+    textPainter.layout(minWidth: 0, maxWidth: size.width * 0.1);
+    Offset offset = Offset(floatingWidth, -size.height * 0.3);
+    textPainter.paint(canvas, offset);
   }
 
   static pointerB(Canvas canvas, Size size,
@@ -406,5 +441,16 @@ class RangePointer {
     Paint paint_1_fill = Paint()..style = PaintingStyle.fill;
     paint_1_fill.color = Colors.white.withOpacity(1.0);
     canvas.drawPath(path_1, paint_1_fill);
+
+    TextStyle textStyle =
+        TextStyle(color: Colors.black, fontSize: size.width * 0.02);
+    TextSpan textSpan = TextSpan(
+        text: playerStateController.pointerBXRatio.toString(),
+        style: textStyle);
+    TextPainter textPainter =
+        TextPainter(text: textSpan, textDirection: TextDirection.ltr);
+    textPainter.layout(minWidth: 0, maxWidth: size.width * 0.1);
+    Offset offset = Offset(floatingWidth, -size.height * 0.3);
+    textPainter.paint(canvas, offset);
   }
 }
