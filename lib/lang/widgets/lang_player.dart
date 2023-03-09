@@ -74,7 +74,10 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   }
 
   void _onPanDown(Offset details) {
+
+    // 플레이어 바 왼쪽의 여백 구하기
     double leftResidual = (screenWidth - plainPainterWidth) / 2;
+
     double playPointerX =
         playerSateController.getPlayPointerX(leftResidual, plainPainterWidth);
     double pointerAX =
@@ -83,6 +86,10 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         playerSateController.getPointerBX(leftResidual, plainPainterWidth);
 
     final box = context.findRenderObject()! as RenderBox;
+    /*
+    사용자 터치 이벤트(global coordinate-based data)를 local coordinate-based data로 변환.
+    global data가 RenderBox 어디에 위치하는지 계산.
+     */
     final localOffset = box.globalToLocal(details);
     double ratio = (details.dx - leftResidual) / plainPainterWidth;
 
