@@ -83,6 +83,7 @@ class VerticalFactory {
         ..style = PaintingStyle.fill
         ..color = Color(0xff3D3D3D).withOpacity(1.0);
 
+      // 가운데 부분을 뚫어준다.
       clipPath1.fillType = PathFillType.evenOdd;
       clipPath1.addPath(clipPath2, Offset(0, 0));
 
