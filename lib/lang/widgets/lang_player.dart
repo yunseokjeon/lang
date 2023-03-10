@@ -74,7 +74,6 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   }
 
   void _onPanDown(Offset details) {
-
     // 플레이어 바 왼쪽의 여백 구하기
     double leftResidual = (screenWidth - plainPainterWidth) / 2;
 
@@ -164,6 +163,9 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     if (isVolumeDragging) {
       double ratio =
           1 - ((details.dy - volumePosition.dy) / (verticalPainterHeight));
+      if (ratio >= 0.99) {
+        ratio = 1.0;
+      }
       playerSateController.setVolumeYRatio(ratio);
     }
   }

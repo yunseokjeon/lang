@@ -14,7 +14,7 @@ class LangMain extends FlameGame {
     playerStateController.setPlayPointerXRatio(0.0);
     overlays.add('langPlayerOverlay');
     overlays.add('langIntroOverlay');
-    // langPlayerOverlay가 렌덩리 되는 시간 벌기
+    // langPlayerOverlay가 렌더링 되는 시간 벌기
     Timer(Duration(seconds: 2), () {
       overlays.remove('langIntroOverlay');
     });
