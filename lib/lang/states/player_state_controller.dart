@@ -122,4 +122,9 @@ class PlayerSateController extends GetxController {
       Offset point, double volumePointerY, Offset volumePosition) {
     return point.dy > (volumePosition.dy + volumePointerY);
   }
+
+  String getVolumeData(){
+    return ((volumeYRatio*100).toInt()).toString();
+  }
 }
+
