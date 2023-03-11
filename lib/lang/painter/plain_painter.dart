@@ -13,9 +13,109 @@ class PlainPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (playerStateController.isPlayerExpanded) {
     } else {
+      double verticalLength = size.height * 0.3;
+
       if (playerStateController.pointerAXRatio == 0.0 &&
           playerStateController.pointerBXRatio == 1.0) {
-        Path leftPlaybarPath = Path();
+        Paint leftPlaybarPaint = Paint()
+          ..style = PaintingStyle.fill
+          ..color = Color(0xffAAAAAA).withOpacity(0.8);
+
+        canvas.drawRect(
+            Offset(0, size.height * playerStateController.playbarYRatio) &
+                Size(size.width * playerStateController.playPointerXRatio,
+                    verticalLength),
+            leftPlaybarPaint);
+
+        Paint rightPlaybarPaint = Paint()
+          ..style = PaintingStyle.fill
+          ..color = Color(0xffFFFFFF).withOpacity(0.8);
+
+        canvas.drawRect(
+            Offset(size.width * playerStateController.playPointerXRatio,
+                    size.height * playerStateController.playbarYRatio) &
+                Size(size.width * (1 - playerStateController.playPointerXRatio),
+                    verticalLength),
+            rightPlaybarPaint);
+
+        Path leftClipPath1 = Path()
+          ..moveTo(0, size.height * playerStateController.playbarYRatio)
+          ..lineTo(size.width * 0.01,
+              size.height * playerStateController.playbarYRatio)
+          ..lineTo(
+              size.width * 0.01,
+              size.height * playerStateController.playbarYRatio +
+                  verticalLength)
+          ..lineTo(
+              0,
+              size.height * playerStateController.playbarYRatio +
+                  verticalLength)
+          ..lineTo(0, size.height * playerStateController.playbarYRatio)
+          ..close();
+
+        Path leftClipPath2 = Path()
+          ..moveTo(size.width * 0.01,
+              size.height * playerStateController.playbarYRatio);
+        leftClipPath2.quadraticBezierTo(
+            0,
+            size.height * playerStateController.playbarYRatio,
+            0,
+            size.height * playerStateController.playbarYRatio +
+                (verticalLength / 2));
+        leftClipPath2.quadraticBezierTo(
+            0,
+            size.height * playerStateController.playbarYRatio + verticalLength,
+            size.width * 0.01,
+            size.height * playerStateController.playbarYRatio + verticalLength);
+        leftClipPath2.lineTo(size.width * 0.01,
+            size.height * playerStateController.playbarYRatio);
+
+        leftClipPath1.fillType = PathFillType.evenOdd;
+        leftClipPath1.addPath(leftClipPath2, Offset(0, 0));
+
+        Paint clipPaint = Paint()
+          ..style = PaintingStyle.fill
+          ..color = Color(0xff3D3D3D).withOpacity(1.0);
+
+        canvas.drawPath(leftClipPath1, clipPaint);
+
+        Path rightClipPath1 = Path()
+          ..moveTo(size.width * 0.99,
+              size.height * playerStateController.playbarYRatio);
+        rightClipPath1.lineTo(
+            size.width, size.height * playerStateController.playbarYRatio);
+        rightClipPath1.lineTo(size.width,
+            size.height * playerStateController.playbarYRatio + verticalLength);
+        rightClipPath1.lineTo(size.width * 0.99,
+            size.height * playerStateController.playbarYRatio + verticalLength);
+        rightClipPath1.lineTo(size.width * 0.99,
+            size.height * playerStateController.playbarYRatio);
+        rightClipPath1.close();
+
+        Path rightClipPath2 = Path()
+          ..moveTo(size.width * 0.99,
+              size.height * playerStateController.playbarYRatio);
+        rightClipPath2.quadraticBezierTo(
+            size.width,
+            size.height * playerStateController.playbarYRatio,
+            size.width,
+            size.height * playerStateController.playbarYRatio +
+                (verticalLength / 2));
+        rightClipPath2.quadraticBezierTo(
+            size.width,
+            size.height * playerStateController.playbarYRatio + verticalLength,
+            size.width * 0.99,
+            size.height * playerStateController.playbarYRatio + verticalLength);
+        rightClipPath2.lineTo(size.width * 0.99,
+            size.height * playerStateController.playbarYRatio);
+        rightClipPath2.close();
+
+        rightClipPath1.fillType = PathFillType.evenOdd;
+        rightClipPath1.addPath(rightClipPath2, Offset(0, 0));
+
+        canvas.drawPath(rightClipPath1, clipPaint);
+
+        /*Path leftPlaybarPath = Path();
         leftPlaybarPath.moveTo(size.width * 0.01,
             size.height * playerStateController.playbarYRatio);
         leftPlaybarPath.quadraticBezierTo(
@@ -68,8 +168,7 @@ class PlainPainter extends CustomPainter {
           ..style = PaintingStyle.fill
           ..color = Color(0xffFFFFFF).withOpacity(0.8);
 
-        canvas.drawPath(rightPlaybarPath, rightPlaybarPaint);
-
+        canvas.drawPath(rightPlaybarPath, rightPlaybarPaint);*/
       } else {}
     }
 

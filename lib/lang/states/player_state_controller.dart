@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PlayerSateController extends GetxController {
-
   bool isPlayerExpanded = false;
 
   double playPointerXRatio = 0.0;
@@ -114,6 +113,11 @@ class PlayerSateController extends GetxController {
 
   bool isTouchPointerA(
       Offset point, double pointerX, double painterHeight, double base) {
+    print("localOffset");
+    print(point);
+    print("pointerX");
+    print(pointerX);
+
     return (point.dx - pointerX).abs() < base &&
         (point.dy - pointerAYMiddlePoint).abs() < base;
   }
