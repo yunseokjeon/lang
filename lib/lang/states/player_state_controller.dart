@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PlayerSateController extends GetxController {
-  double playPointerXRatio = 0.3;
-  double crossbeamYRatio = 0.8;
+
+  bool isPlayerExpanded = false;
+
+  double playPointerXRatio = 0.0;
+  double playbarYRatio = 0.8;
   double playPointerYMiddlePoint = 0.0;
   double playPointerYStartRatio = 0.0;
   double playPointerYEndRatio = 0.0;
@@ -46,7 +49,10 @@ class PlayerSateController extends GetxController {
   }
 
   void setPlayPointerXRatio(double newValue) {
-    if (0.0 <= newValue && newValue <= 1.0) {
+    if (0.0 <= newValue &&
+        newValue <= 1.0 &&
+        pointerAXRatio <= newValue &&
+        newValue <= pointerBXRatio) {
       playPointerXRatio = newValue;
       update();
     }
@@ -123,8 +129,7 @@ class PlayerSateController extends GetxController {
     return point.dy > (volumePosition.dy + volumePointerY);
   }
 
-  String getVolumeData(){
-    return ((volumeYRatio*100).toInt()).toString();
+  String getVolumeData() {
+    return ((volumeYRatio * 100).toInt()).toString();
   }
 }
-

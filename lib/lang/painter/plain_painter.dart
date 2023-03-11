@@ -11,7 +11,69 @@ class PlainPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Path leftCrossbeam = Path()
+    if (playerStateController.isPlayerExpanded) {
+    } else {
+      if (playerStateController.pointerAXRatio == 0.0 &&
+          playerStateController.pointerBXRatio == 1.0) {
+        Path leftPlaybarPath = Path();
+        leftPlaybarPath.moveTo(size.width * 0.01,
+            size.height * playerStateController.playbarYRatio);
+        leftPlaybarPath.quadraticBezierTo(
+            0,
+            size.height * playerStateController.playbarYRatio,
+            0,
+            size.height * (playerStateController.playbarYRatio + 0.1));
+        leftPlaybarPath.quadraticBezierTo(
+            0,
+            size.height * (playerStateController.playbarYRatio + 0.2),
+            size.width * 0.01,
+            size.height * (playerStateController.playbarYRatio + 0.2));
+        leftPlaybarPath.lineTo(
+            size.width * playerStateController.playPointerXRatio,
+            size.height * (playerStateController.playbarYRatio + 0.2));
+        leftPlaybarPath.lineTo(
+            size.width * playerStateController.playPointerXRatio,
+            size.height * playerStateController.playbarYRatio);
+        leftPlaybarPath.lineTo(size.width * 0.01,
+            size.height * playerStateController.playbarYRatio);
+
+        Paint leftPlaybarPaint = Paint()
+          ..style = PaintingStyle.fill
+          ..color = Color(0xffAAAAAA).withOpacity(0.8);
+
+        canvas.drawPath(leftPlaybarPath, leftPlaybarPaint);
+
+        Path rightPlaybarPath = Path();
+        rightPlaybarPath.moveTo(
+            size.width * playerStateController.playPointerXRatio,
+            size.height * playerStateController.playbarYRatio);
+        rightPlaybarPath.lineTo(size.width * 0.99,
+            size.height * playerStateController.playbarYRatio);
+        rightPlaybarPath.quadraticBezierTo(
+            size.width,
+            size.height * playerStateController.playbarYRatio,
+            size.width,
+            size.height * (playerStateController.playbarYRatio + 0.1));
+        rightPlaybarPath.quadraticBezierTo(
+            size.width,
+            size.height * (playerStateController.playbarYRatio + 0.2),
+            size.width * 0.99,
+            size.height * (playerStateController.playbarYRatio + 0.2));
+        rightPlaybarPath.lineTo(
+            size.width * playerStateController.playPointerXRatio,
+            size.height * (playerStateController.playbarYRatio + 0.2));
+        rightPlaybarPath.lineTo(size.width * playerStateController.playPointerXRatio, size.height * playerStateController.playbarYRatio);
+
+        Paint rightPlaybarPaint = Paint()
+          ..style = PaintingStyle.fill
+          ..color = Color(0xffFFFFFF).withOpacity(0.8);
+
+        canvas.drawPath(rightPlaybarPath, rightPlaybarPaint);
+
+      } else {}
+    }
+
+    /*Path leftCrossbeam = Path()
       ..moveTo(0, size.height * playerStateController.crossbeamYRatio)
       ..lineTo(size.width * playerStateController.getPlayPointerXRatio(),
           size.height * playerStateController.crossbeamYRatio);
@@ -69,7 +131,7 @@ class PlainPainter extends CustomPainter {
         size.width,
         size.height * playerStateController.crossbeamYRatio +
             size.height * 0.1);
-    endTimeTextPainter.paint(canvas, endOffset);
+    endTimeTextPainter.paint(canvas, endOffset);*/
   }
 
   @override
@@ -79,7 +141,7 @@ class PlainPainter extends CustomPainter {
 }
 
 class RangePointer {
-  static pointerA(Canvas canvas, Size size,
+  static pointerAOld(Canvas canvas, Size size,
       PlayerSateController playerStateController, double pointerAXRatio) {
     double widthRatio = 0.05,
         heightRatio = playerStateController.pointerAYRatio;
@@ -174,7 +236,7 @@ class RangePointer {
     textPainter.paint(canvas, offset);
   }
 
-  static pointerB(Canvas canvas, Size size,
+  static pointerBOld(Canvas canvas, Size size,
       PlayerSateController playerStateController, double pointerBXRatio) {
     double widthRatio = 0.05,
         heightRatio = playerStateController.pointerBYRatio;

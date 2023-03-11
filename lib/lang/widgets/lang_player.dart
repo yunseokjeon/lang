@@ -59,7 +59,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         playerSateController.setPlayPointerYEnd(plainPainterHeight * 0.5);
 
         double playPointerYMiddlePoint =
-            plainPainterHeight * playerSateController.crossbeamYRatio;
+            plainPainterHeight * playerSateController.playbarYRatio;
 
         playerSateController
             .setPlayPointerYMiddlePoint(playPointerYMiddlePoint);
@@ -74,6 +74,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   }
 
   void _onPanDown(Offset details) {
+
     // 플레이어 바 왼쪽의 여백 구하기
     double leftResidual = (screenWidth - plainPainterWidth) / 2;
 
@@ -85,28 +86,28 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
         playerSateController.getPointerBX(leftResidual, plainPainterWidth);
 
     final box = context.findRenderObject()! as RenderBox;
-    /*
-    사용자 터치 이벤트(global coordinate-based data)를 local coordinate-based data로 변환.
-    global data가 RenderBox 어디에 위치하는지 계산.
-     */
+
+    /*사용자 터치 이벤트(global coordinate-based data)를 local coordinate-based data로 변환.
+    global data가 RenderBox 어디에 위치하는지 계산.*/
+
     final localOffset = box.globalToLocal(details);
     double ratio = (details.dx - leftResidual) / plainPainterWidth;
 
     if (!playerSateController.isTouchPointerA(
-            localOffset, pointerAX, plainPainterHeight, 80) &&
+            localOffset, pointerAX, plainPainterHeight, plainPainterWidth*0.2) &&
         !playerSateController.isTouchPointerB(
-            localOffset, pointerBX, plainPainterHeight, 80)) {
+            localOffset, pointerBX, plainPainterHeight, plainPainterWidth*0.2)) {
       playerSateController.setPlayPointerXRatio(ratio);
     }
 
     if (playerSateController.isTouchPlayPointer(
-        localOffset, playPointerX, plainPainterHeight, 100)) {
+        localOffset, playPointerX, plainPainterHeight, plainPainterWidth*0.2)) {
       isPlayPointerDragging = true;
     } else if (playerSateController.isTouchPointerA(
-        localOffset, pointerAX, plainPainterHeight, 100)) {
+        localOffset, pointerAX, plainPainterHeight, plainPainterWidth*0.2)) {
       isPointerADragging = true;
     } else if (playerSateController.isTouchPointerB(
-        localOffset, pointerBX, plainPainterHeight, 100)) {
+        localOffset, pointerBX, plainPainterHeight, plainPainterWidth*0.2)) {
       isPointerBDragging = true;
     }
   }
