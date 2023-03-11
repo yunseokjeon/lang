@@ -74,7 +74,6 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
   }
 
   void _onPanDown(Offset details) {
-
     // 플레이어 바 왼쪽의 여백 구하기
     double leftResidual = (screenWidth - plainPainterWidth) / 2;
 
@@ -93,21 +92,24 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     final localOffset = box.globalToLocal(details);
     double ratio = (details.dx - leftResidual) / plainPainterWidth;
 
-    if (!playerSateController.isTouchPointerA(
-            localOffset, pointerAX, plainPainterHeight, plainPainterWidth*0.2) &&
-        !playerSateController.isTouchPointerB(
-            localOffset, pointerBX, plainPainterHeight, plainPainterWidth*0.2)) {
+    print("ratio");
+    print(ratio);
+
+    if (!playerSateController.isTouchPointerA(localOffset, pointerAX,
+            plainPainterHeight, plainPainterWidth * 0.2) &&
+        !playerSateController.isTouchPointerB(localOffset, pointerBX,
+            plainPainterHeight, plainPainterWidth * 0.2)) {
       playerSateController.setPlayPointerXRatio(ratio);
     }
 
-    if (playerSateController.isTouchPlayPointer(
-        localOffset, playPointerX, plainPainterHeight, plainPainterWidth*0.2)) {
+    if (playerSateController.isTouchPlayPointer(localOffset, playPointerX,
+        plainPainterHeight, plainPainterWidth * 0.2)) {
       isPlayPointerDragging = true;
     } else if (playerSateController.isTouchPointerA(
-        localOffset, pointerAX, plainPainterHeight, plainPainterWidth*0.2)) {
+        localOffset, pointerAX, plainPainterHeight, plainPainterWidth * 0.2)) {
       isPointerADragging = true;
     } else if (playerSateController.isTouchPointerB(
-        localOffset, pointerBX, plainPainterHeight, plainPainterWidth*0.2)) {
+        localOffset, pointerBX, plainPainterHeight, plainPainterWidth * 0.2)) {
       isPointerBDragging = true;
     }
   }
@@ -208,7 +210,7 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
             Container(
               height: screenHeight * 0.05,
               margin: EdgeInsets.fromLTRB(screenWidth * 0.05,
-                  screenHeight * 0.1, screenWidth * 0.05, 0),
+                  screenHeight * 0.1, screenWidth * 0.05, screenHeight * 0.1),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
