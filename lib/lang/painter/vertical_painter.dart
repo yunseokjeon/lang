@@ -54,21 +54,6 @@ class VerticalFactory {
         ..lineTo(0, 0)
         ..close();
 
-      /*Path clipPath2 = Path()..moveTo(size.width * 0.1, size.height * 0.2);
-      clipPath2.quadraticBezierTo(size.width * 0.1, size.height * 0.1,
-          size.width * 0.2, size.height * 0.1);
-      clipPath2.lineTo(size.width * 0.8, size.height * 0.1);
-      clipPath2.quadraticBezierTo(size.width * 0.9, size.height * 0.1,
-          size.width * 0.9, size.height * 0.2);
-      clipPath2.lineTo(size.width * 0.9, size.height * 0.8);
-      clipPath2.quadraticBezierTo(size.width * 0.9, size.height * 0.9,
-          size.width * 0.8, size.height * 0.9);
-      clipPath2.lineTo(size.width * 0.2, size.height * 0.9);
-      clipPath2.quadraticBezierTo(size.width * 0.1, size.height * 0.9,
-          size.width * 0.1, size.height * 0.8);
-      clipPath2.lineTo(size.width * 0.1, size.height * 0.2);
-      clipPath2.close();*/
-
       Path clipPath2 = Path()..moveTo(0, size.height * 0.2);
       clipPath2.quadraticBezierTo(0, 0, size.width * 0.2, 0);
       clipPath2.lineTo(size.width * 0.8, 0);
