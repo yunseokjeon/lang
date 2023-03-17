@@ -92,26 +92,24 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     final localOffset = box.globalToLocal(details);
     double ratio = (details.dx - leftResidual) / plainPainterWidth;
 
-    print("ratio");
-    print(ratio);
-
     if (!playerSateController.isTouchPointerA(localOffset, pointerAX,
-            plainPainterHeight, plainPainterWidth * 0.2) &&
+            plainPainterHeight, plainPainterWidth * 0.1) &&
         !playerSateController.isTouchPointerB(localOffset, pointerBX,
-            plainPainterHeight, plainPainterWidth * 0.2)) {
+            plainPainterHeight, plainPainterWidth * 0.1)) {
       playerSateController.setPlayPointerXRatio(ratio);
     }
 
     if (playerSateController.isTouchPlayPointer(localOffset, playPointerX,
-        plainPainterHeight, plainPainterWidth * 0.2)) {
+        plainPainterHeight, plainPainterWidth * 0.3)) {
       isPlayPointerDragging = true;
     } else if (playerSateController.isTouchPointerA(
-        localOffset, pointerAX, plainPainterHeight, plainPainterWidth * 0.2)) {
+        localOffset, pointerAX, plainPainterHeight, plainPainterWidth * 0.3)) {
       isPointerADragging = true;
     } else if (playerSateController.isTouchPointerB(
-        localOffset, pointerBX, plainPainterHeight, plainPainterWidth * 0.2)) {
+        localOffset, pointerBX, plainPainterHeight, plainPainterWidth * 0.3)) {
       isPointerBDragging = true;
     }
+
   }
 
   void _onPanUpdate(Offset details) {
