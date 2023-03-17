@@ -22,7 +22,10 @@ class PlainPainter extends CustomPainter {
           ..color = Color(0xffAAAAAA).withOpacity(0.8);
 
         canvas.drawRect(
-            Offset(0, size.height * playerStateController.playbarYRatio) &
+            Offset(
+                    0,
+                    size.height * playerStateController.playbarYRatio -
+                        verticalLength) &
                 Size(size.width * playerStateController.playPointerXRatio,
                     verticalLength),
             leftPlaybarPaint);
@@ -32,43 +35,62 @@ class PlainPainter extends CustomPainter {
           ..color = Color(0xffFFFFFF).withOpacity(0.8);
 
         canvas.drawRect(
-            Offset(size.width * playerStateController.playPointerXRatio,
-                    size.height * playerStateController.playbarYRatio) &
+            Offset(
+                    size.width * playerStateController.playPointerXRatio,
+                    size.height * playerStateController.playbarYRatio -
+                        verticalLength) &
                 Size(size.width * (1 - playerStateController.playPointerXRatio),
                     verticalLength),
             rightPlaybarPaint);
 
         Path leftClipPath1 = Path()
-          ..moveTo(0, size.height * playerStateController.playbarYRatio)
-          ..lineTo(size.width * 0.01,
-              size.height * playerStateController.playbarYRatio)
+          ..moveTo(
+              0,
+              size.height * playerStateController.playbarYRatio -
+                  verticalLength)
+          ..lineTo(
+              size.width * 0.01,
+              size.height * playerStateController.playbarYRatio -
+                  verticalLength)
           ..lineTo(
               size.width * 0.01,
               size.height * playerStateController.playbarYRatio +
+                  verticalLength -
                   verticalLength)
           ..lineTo(
               0,
               size.height * playerStateController.playbarYRatio +
+                  verticalLength -
                   verticalLength)
-          ..lineTo(0, size.height * playerStateController.playbarYRatio)
+          ..lineTo(
+              0,
+              size.height * playerStateController.playbarYRatio -
+                  verticalLength)
           ..close();
 
         Path leftClipPath2 = Path()
-          ..moveTo(size.width * 0.01,
-              size.height * playerStateController.playbarYRatio);
+          ..moveTo(
+              size.width * 0.01,
+              size.height * playerStateController.playbarYRatio -
+                  verticalLength);
         leftClipPath2.quadraticBezierTo(
             0,
-            size.height * playerStateController.playbarYRatio,
+            size.height * playerStateController.playbarYRatio - verticalLength,
             0,
             size.height * playerStateController.playbarYRatio +
-                (verticalLength / 2));
+                (verticalLength / 2) -
+                verticalLength);
         leftClipPath2.quadraticBezierTo(
             0,
-            size.height * playerStateController.playbarYRatio + verticalLength,
+            size.height * playerStateController.playbarYRatio +
+                verticalLength -
+                verticalLength,
             size.width * 0.01,
-            size.height * playerStateController.playbarYRatio + verticalLength);
+            size.height * playerStateController.playbarYRatio +
+                verticalLength -
+                verticalLength);
         leftClipPath2.lineTo(size.width * 0.01,
-            size.height * playerStateController.playbarYRatio);
+            size.height * playerStateController.playbarYRatio - verticalLength);
 
         leftClipPath1.fillType = PathFillType.evenOdd;
         leftClipPath1.addPath(leftClipPath2, Offset(0, 0));
@@ -80,34 +102,49 @@ class PlainPainter extends CustomPainter {
         canvas.drawPath(leftClipPath1, clipPaint);
 
         Path rightClipPath1 = Path()
-          ..moveTo(size.width * 0.99,
-              size.height * playerStateController.playbarYRatio);
-        rightClipPath1.lineTo(
-            size.width, size.height * playerStateController.playbarYRatio);
+          ..moveTo(
+              size.width * 0.99,
+              size.height * playerStateController.playbarYRatio -
+                  verticalLength);
         rightClipPath1.lineTo(size.width,
-            size.height * playerStateController.playbarYRatio + verticalLength);
+            size.height * playerStateController.playbarYRatio - verticalLength);
+        rightClipPath1.lineTo(
+            size.width,
+            size.height * playerStateController.playbarYRatio +
+                verticalLength -
+                verticalLength);
+        rightClipPath1.lineTo(
+            size.width * 0.99,
+            size.height * playerStateController.playbarYRatio +
+                verticalLength -
+                verticalLength);
         rightClipPath1.lineTo(size.width * 0.99,
-            size.height * playerStateController.playbarYRatio + verticalLength);
-        rightClipPath1.lineTo(size.width * 0.99,
-            size.height * playerStateController.playbarYRatio);
+            size.height * playerStateController.playbarYRatio - verticalLength);
         rightClipPath1.close();
 
         Path rightClipPath2 = Path()
-          ..moveTo(size.width * 0.99,
-              size.height * playerStateController.playbarYRatio);
+          ..moveTo(
+              size.width * 0.99,
+              size.height * playerStateController.playbarYRatio -
+                  verticalLength);
         rightClipPath2.quadraticBezierTo(
             size.width,
-            size.height * playerStateController.playbarYRatio,
+            size.height * playerStateController.playbarYRatio - verticalLength,
             size.width,
             size.height * playerStateController.playbarYRatio +
-                (verticalLength / 2));
+                (verticalLength / 2) -
+                verticalLength);
         rightClipPath2.quadraticBezierTo(
             size.width,
-            size.height * playerStateController.playbarYRatio + verticalLength,
+            size.height * playerStateController.playbarYRatio +
+                verticalLength -
+                verticalLength,
             size.width * 0.99,
-            size.height * playerStateController.playbarYRatio + verticalLength);
+            size.height * playerStateController.playbarYRatio +
+                verticalLength -
+                verticalLength);
         rightClipPath2.lineTo(size.width * 0.99,
-            size.height * playerStateController.playbarYRatio);
+            size.height * playerStateController.playbarYRatio - verticalLength);
         rightClipPath2.close();
 
         rightClipPath1.fillType = PathFillType.evenOdd;
@@ -116,10 +153,10 @@ class PlainPainter extends CustomPainter {
         canvas.drawPath(rightClipPath1, clipPaint);
 
         RangePointer.pointerA(canvas, size, playerStateController,
-            playerStateController.getPointerAXRatio());
+            playerStateController.getPointerAXRatio(), verticalLength);
 
         RangePointer.pointerB(canvas, size, playerStateController,
-            playerStateController.pointerBXRatio);
+            playerStateController.pointerBXRatio, verticalLength);
       } else {}
     }
   }
@@ -131,10 +168,15 @@ class PlainPainter extends CustomPainter {
 }
 
 class RangePointer {
-  static pointerA(Canvas canvas, Size size,
-      PlayerSateController playerStateController, double pointerAXRatio) {
-    double widthRatio = 0.03,
-        heightRatio = playerStateController.pointerAYRatio;
+  static pointerA(
+      Canvas canvas,
+      Size size,
+      PlayerSateController playerStateController,
+      double pointerAXRatio,
+      double verticalLength) {
+    verticalLength = 0;
+
+    double widthRatio = 0.03, heightRatio = 0.5;
     double moveX = size.width * pointerAXRatio;
     double zeroWidth = widthRatio * size.width * 0.5000000;
 
@@ -144,61 +186,66 @@ class RangePointer {
     // Path 1 Fill
     paint.color = const Color(0xff379CB0);
     path.moveTo((widthRatio * size.width * 0.5 - zeroWidth) + moveX,
-        heightRatio * size.height);
-    path.lineTo(
-        (widthRatio * 0 - zeroWidth) + moveX, heightRatio * size.height * 0.68);
-    path.lineTo(
-        (widthRatio * 0 - zeroWidth) + moveX, heightRatio * size.height * 0.15);
+        heightRatio * size.height - verticalLength);
+    path.lineTo((widthRatio * 0 - zeroWidth) + moveX,
+        heightRatio * size.height * 0.68 - verticalLength);
+    path.lineTo((widthRatio * 0 - zeroWidth) + moveX,
+        heightRatio * size.height * 0.15 - verticalLength);
     path.lineTo((widthRatio * size.width - zeroWidth) + moveX,
-        heightRatio * size.height * 0.15);
+        heightRatio * size.height * 0.15 - verticalLength);
     path.lineTo((widthRatio * size.width - zeroWidth) + moveX,
-        heightRatio * size.height * 0.68);
+        heightRatio * size.height * 0.68 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.5 - zeroWidth) + moveX,
-        heightRatio * size.height);
+        heightRatio * size.height - verticalLength);
     path.lineTo((widthRatio * size.width * 0.5 - zeroWidth) + moveX,
-        heightRatio * size.height);
+        heightRatio * size.height - verticalLength);
     canvas.drawPath(path, paint);
 
     // Path 2 Fill
     path = Path();
     paint.color = const Color(0xffffffff);
     path.moveTo((widthRatio * size.width * 0.19 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.62);
+        heightRatio * size.height * 0.62 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.45 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.29);
+        heightRatio * size.height * 0.29 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.55 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.29);
+        heightRatio * size.height * 0.29 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.81 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.62);
+        heightRatio * size.height * 0.62 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.75 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.62);
+        heightRatio * size.height * 0.62 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.66 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.51);
+        heightRatio * size.height * 0.51 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.34 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.51);
+        heightRatio * size.height * 0.51 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.25 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.62);
+        heightRatio * size.height * 0.62 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.19 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.62);
+        heightRatio * size.height * 0.62 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.19 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.62);
+        heightRatio * size.height * 0.62 - verticalLength);
     path.moveTo((widthRatio * size.width * 0.50 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.3);
+        heightRatio * size.height * 0.3 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.36 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.49);
+        heightRatio * size.height * 0.49 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.65 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.49);
+        heightRatio * size.height * 0.49 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.50 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.3);
+        heightRatio * size.height * 0.3 - verticalLength);
     path.lineTo((widthRatio * size.width * 0.50 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.3);
+        heightRatio * size.height * 0.3 - verticalLength);
     canvas.drawPath(path, paint);
   }
 
-  static pointerB(Canvas canvas, Size size,
-      PlayerSateController playerStateController, double pointerBXRatio) {
-    double widthRatio = 0.03,
-        heightRatio = playerStateController.pointerBYRatio;
+  static pointerB(
+      Canvas canvas,
+      Size size,
+      PlayerSateController playerStateController,
+      double pointerBXRatio,
+      double verticalLength) {
+    verticalLength = 0;
+
+    double widthRatio = 0.03, heightRatio = 0.5;
     double moveX = size.width * pointerBXRatio;
     double zeroWidth = widthRatio * size.width * 0.5000000;
 
@@ -208,236 +255,238 @@ class RangePointer {
     // Path 1 Fill
     paint.color = const Color(0xff379CB0);
     path.moveTo((widthRatio * size.width * 0.5 - zeroWidth) + moveX,
-        heightRatio * size.height);
+        heightRatio * size.height + verticalLength);
+    path.lineTo((widthRatio * 0 - zeroWidth) + moveX,
+        heightRatio * size.height * 0.62 + verticalLength);
     path.lineTo(
-        (widthRatio * 0 - zeroWidth) + moveX, heightRatio * size.height * 0.62);
-    path.lineTo((widthRatio * 0 - zeroWidth) + moveX, heightRatio * 0);
-    path.lineTo((widthRatio * size.width - zeroWidth) + moveX, heightRatio * 0);
+        (widthRatio * 0 - zeroWidth) + moveX, heightRatio * 0 + verticalLength);
     path.lineTo((widthRatio * size.width - zeroWidth) + moveX,
-        heightRatio * size.height * 0.62);
+        heightRatio * 0 + verticalLength);
+    path.lineTo((widthRatio * size.width - zeroWidth) + moveX,
+        heightRatio * size.height * 0.62 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.5 - zeroWidth) + moveX,
-        heightRatio * size.height);
+        heightRatio * size.height + verticalLength);
     path.lineTo((widthRatio * size.width * 0.5 - zeroWidth) + moveX,
-        heightRatio * size.height);
+        heightRatio * size.height + verticalLength);
     canvas.drawPath(path, paint);
 
     // Path 2 Fill
     path = Path();
     paint.color = const Color(0xffffffff);
     path.moveTo((widthRatio * size.width * 0.25 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.55);
+        heightRatio * size.height * 0.55 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.25 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.16);
+        heightRatio * size.height * 0.16 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.49 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.16);
+        heightRatio * size.height * 0.16 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.52 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.16,
+        heightRatio * size.height * 0.16 + verticalLength,
         (widthRatio * size.width * 0.56 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.16,
+        heightRatio * size.height * 0.16 + verticalLength,
         (widthRatio * size.width * 0.59 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.17);
+        heightRatio * size.height * 0.17 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.62 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.17,
+        heightRatio * size.height * 0.17 + verticalLength,
         (widthRatio * size.width * 0.65 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.17,
+        heightRatio * size.height * 0.17 + verticalLength,
         (widthRatio * size.width * 0.67 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.18);
+        heightRatio * size.height * 0.18 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.70 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.19,
+        heightRatio * size.height * 0.19 + verticalLength,
         (widthRatio * size.width * 0.72 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.2,
+        heightRatio * size.height * 0.2 + verticalLength,
         (widthRatio * size.width * 0.73 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.21);
+        heightRatio * size.height * 0.21 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.75 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.22,
+        heightRatio * size.height * 0.22 + verticalLength,
         (widthRatio * size.width * 0.75 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.24,
+        heightRatio * size.height * 0.24 + verticalLength,
         (widthRatio * size.width * 0.75 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.26);
+        heightRatio * size.height * 0.26 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.75 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.28,
+        heightRatio * size.height * 0.28 + verticalLength,
         (widthRatio * size.width * 0.75 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.29,
+        heightRatio * size.height * 0.29 + verticalLength,
         (widthRatio * size.width * 0.74 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.3);
+        heightRatio * size.height * 0.3 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.73 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.32,
+        heightRatio * size.height * 0.32 + verticalLength,
         (widthRatio * size.width * 0.71 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33,
+        heightRatio * size.height * 0.33 + verticalLength,
         (widthRatio * size.width * 0.68 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33);
+        heightRatio * size.height * 0.33 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.66 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.34,
+        heightRatio * size.height * 0.34 + verticalLength,
         (widthRatio * size.width * 0.62 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.35,
+        heightRatio * size.height * 0.35 + verticalLength,
         (widthRatio * size.width * 0.57 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.35);
+        heightRatio * size.height * 0.35 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.57 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.35);
+        heightRatio * size.height * 0.35 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.63 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.35,
+        heightRatio * size.height * 0.35 + verticalLength,
         (widthRatio * size.width * 0.67 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.35,
+        heightRatio * size.height * 0.35 + verticalLength,
         (widthRatio * size.width * 0.70 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.36);
+        heightRatio * size.height * 0.36 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.73 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.37,
+        heightRatio * size.height * 0.37 + verticalLength,
         (widthRatio * size.width * 0.76 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.38,
+        heightRatio * size.height * 0.38 + verticalLength,
         (widthRatio * size.width * 0.77 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.40);
+        heightRatio * size.height * 0.40 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.78 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.41,
+        heightRatio * size.height * 0.41 + verticalLength,
         (widthRatio * size.width * 0.78 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.43,
+        heightRatio * size.height * 0.43 + verticalLength,
         (widthRatio * size.width * 0.78 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.45);
+        heightRatio * size.height * 0.45 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.78 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.47,
+        heightRatio * size.height * 0.47 + verticalLength,
         (widthRatio * size.width * 0.78 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.49,
+        heightRatio * size.height * 0.49 + verticalLength,
         (widthRatio * size.width * 0.76 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.50);
+        heightRatio * size.height * 0.50 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.74 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.51,
+        heightRatio * size.height * 0.51 + verticalLength,
         (widthRatio * size.width * 0.72 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.52,
+        heightRatio * size.height * 0.52 + verticalLength,
         (widthRatio * size.width * 0.69 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.53);
+        heightRatio * size.height * 0.53 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.67 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.54,
+        heightRatio * size.height * 0.54 + verticalLength,
         (widthRatio * size.width * 0.64 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.54,
+        heightRatio * size.height * 0.54 + verticalLength,
         (widthRatio * size.width * 0.61 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.54);
+        heightRatio * size.height * 0.54 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.57 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.54,
+        heightRatio * size.height * 0.54 + verticalLength,
         (widthRatio * size.width * 0.54 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.55,
+        heightRatio * size.height * 0.55 + verticalLength,
         (widthRatio * size.width * 0.51 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.55);
+        heightRatio * size.height * 0.55 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.25 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.55);
+        heightRatio * size.height * 0.55 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.25 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.55);
+        heightRatio * size.height * 0.55 + verticalLength);
     path.moveTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33);
+        heightRatio * size.height * 0.33 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.49 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33);
+        heightRatio * size.height * 0.33 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.53 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33,
+        heightRatio * size.height * 0.33 + verticalLength,
         (widthRatio * size.width * 0.57 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33,
+        heightRatio * size.height * 0.33 + verticalLength,
         (widthRatio * size.width * 0.60 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33);
+        heightRatio * size.height * 0.33 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.63 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33,
+        heightRatio * size.height * 0.33 + verticalLength,
         (widthRatio * size.width * 0.65 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.32,
+        heightRatio * size.height * 0.32 + verticalLength,
         (widthRatio * size.width * 0.67 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.31);
+        heightRatio * size.height * 0.31 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.69 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.30,
+        heightRatio * size.height * 0.30 + verticalLength,
         (widthRatio * size.width * 0.70 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.29,
+        heightRatio * size.height * 0.29 + verticalLength,
         (widthRatio * size.width * 0.70 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.27);
+        heightRatio * size.height * 0.27 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.70 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.24,
+        heightRatio * size.height * 0.24 + verticalLength,
         (widthRatio * size.width * 0.69 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.23,
+        heightRatio * size.height * 0.23 + verticalLength,
         (widthRatio * size.width * 0.67 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.21);
+        heightRatio * size.height * 0.21 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.65 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.20,
+        heightRatio * size.height * 0.20 + verticalLength,
         (widthRatio * size.width * 0.62 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.20,
+        heightRatio * size.height * 0.20 + verticalLength,
         (widthRatio * size.width * 0.59 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.19);
+        heightRatio * size.height * 0.19 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.56 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.19,
+        heightRatio * size.height * 0.19 + verticalLength,
         (widthRatio * size.width * 0.52 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.19,
+        heightRatio * size.height * 0.19 + verticalLength,
         (widthRatio * size.width * 0.49 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.19);
+        heightRatio * size.height * 0.19 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.19);
+        heightRatio * size.height * 0.19 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33);
+        heightRatio * size.height * 0.33 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.33);
+        heightRatio * size.height * 0.33 + verticalLength);
     path.moveTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.52);
+        heightRatio * size.height * 0.52 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.51 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.52);
+        heightRatio * size.height * 0.52 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.55 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.52,
+        heightRatio * size.height * 0.52 + verticalLength,
         (widthRatio * size.width * 0.58 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.52,
+        heightRatio * size.height * 0.52 + verticalLength,
         (widthRatio * size.width * 0.62 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.51);
+        heightRatio * size.height * 0.51 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.65 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.51,
+        heightRatio * size.height * 0.51 + verticalLength,
         (widthRatio * size.width * 0.68 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.5,
+        heightRatio * size.height * 0.5 + verticalLength,
         (widthRatio * size.width * 0.70 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.49);
+        heightRatio * size.height * 0.49 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.72 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.48,
+        heightRatio * size.height * 0.48 + verticalLength,
         (widthRatio * size.width * 0.73 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.46,
+        heightRatio * size.height * 0.46 + verticalLength,
         (widthRatio * size.width * 0.73 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.44);
+        heightRatio * size.height * 0.44 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.73 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.42,
+        heightRatio * size.height * 0.42 + verticalLength,
         (widthRatio * size.width * 0.71 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.40,
+        heightRatio * size.height * 0.40 + verticalLength,
         (widthRatio * size.width * 0.69 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.39);
+        heightRatio * size.height * 0.39 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.67 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.38,
+        heightRatio * size.height * 0.38 + verticalLength,
         (widthRatio * size.width * 0.64 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.37,
+        heightRatio * size.height * 0.37 + verticalLength,
         (widthRatio * size.width * 0.61 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.37);
+        heightRatio * size.height * 0.37 + verticalLength);
     path.cubicTo(
         (widthRatio * size.width * 0.57 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.36,
+        heightRatio * size.height * 0.36 + verticalLength,
         (widthRatio * size.width * 0.53 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.36,
+        heightRatio * size.height * 0.36 + verticalLength,
         (widthRatio * size.width * 0.49 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.36);
+        heightRatio * size.height * 0.36 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.36);
+        heightRatio * size.height * 0.36 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.52);
+        heightRatio * size.height * 0.52 + verticalLength);
     path.lineTo((widthRatio * size.width * 0.31 - zeroWidth) + moveX,
-        heightRatio * size.height * 0.52);
+        heightRatio * size.height * 0.52 + verticalLength);
     canvas.drawPath(path, paint);
   }
 
