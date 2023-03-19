@@ -100,13 +100,13 @@ class _LangPlayerOverlayState extends State<LangPlayerOverlay>
     }
 
     if (playerSateController.isTouchPlayPointer(localOffset, playPointerX,
-        plainPainterHeight, plainPainterWidth * 0.3)) {
+        plainPainterHeight, plainPainterWidth * 0.2)) {
       isPlayPointerDragging = true;
     } else if (playerSateController.isTouchPointerA(
-        localOffset, pointerAX, plainPainterHeight, plainPainterWidth * 0.3)) {
+        localOffset, pointerAX, plainPainterHeight, plainPainterWidth * 0.2)) {
       isPointerADragging = true;
     } else if (playerSateController.isTouchPointerB(
-        localOffset, pointerBX, plainPainterHeight, plainPainterWidth * 0.3)) {
+        localOffset, pointerBX, plainPainterHeight, plainPainterWidth * 0.2)) {
       isPointerBDragging = true;
     }
 
