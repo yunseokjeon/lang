@@ -58,14 +58,14 @@ class PlayerSateController extends GetxController {
   }
 
   void setPointerAXRatio(double newValue) {
-    if (0.0 <= newValue && newValue <= 1.0) {
+    if (0.0 <= newValue && newValue <= 1.0 && newValue <= playPointerXRatio) {
       pointerAXRatio = newValue;
       update();
     }
   }
 
   void setPointerBXRatio(double newValue) {
-    if (0.0 <= newValue && newValue <= 1.0) {
+    if (0.0 <= newValue && newValue <= 1.0 && playPointerXRatio <= newValue) {
       pointerBXRatio = newValue;
       update();
     }
